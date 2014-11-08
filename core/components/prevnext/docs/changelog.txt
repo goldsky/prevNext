@@ -1,3 +1,7 @@
+PrevNext 1.0.0-pl (Nov 8, 2014)
+=================================================
+- [#2] reset $prefix . 'id' to avoid error parsing on link tag in chunk
+
 PrevNext 1.0.0-beta1 (Aug 4, 2014)
 =================================================
 - initial release

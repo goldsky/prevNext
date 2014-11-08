@@ -98,7 +98,9 @@ if ($prevResource) {
         }
     }
 } else {
-    $prevArray = array();
+    $prevArray = array(
+        $prevPrefix . 'id' => ''
+    );
 }
 
 // Next
@@ -134,7 +136,9 @@ if ($nextResource) {
         }
     }
 } else {
-    $nextArray = array();
+    $nextArray = array(
+        $nextPrefix . 'id' => ''
+    );
 }
 
 //$toArray = 1;

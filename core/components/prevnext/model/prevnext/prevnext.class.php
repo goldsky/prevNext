@@ -29,7 +29,7 @@
 class PrevNext {
 
     const VERSION = '1.0.0';
-    const RELEASE = 'beta1';
+    const RELEASE = 'pl';
 
     /**
      * modX object
