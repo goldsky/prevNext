@@ -5,7 +5,7 @@
  *
  * Copyright 2014 by goldsky <goldsky@virtudraft.com>
  *
- * This file is part of PrevNext, a navigator snippet for MODX Revolution to 
+ * This file is part of PrevNext, a navigator snippet for MODX Revolution to
  * create Previous and Next links in a page
  *
  * PrevNext is free software; you can redistribute it and/or modify it under the
@@ -412,4 +412,86 @@ class PrevNext {
         }
     }
 
+    /**
+     * Get sibling of current resource
+     * @param   string  $direction  '<' (default) or '>'
+     * @return  array   resource's data in array
+     */
+    public function getSibling($direction = '<') {
+        $direction = ($direction === '<' ? '<' : '>');
+        if ($direction === '<') {
+            $prefix = $this->config['prevPrefix'];
+            $sortDir = 'desc';
+        } else {
+            $prefix = $this->config['nextPrefix'];
+            $sortDir = 'asc';
+        }
+
+        $resource = $this->modx->resource->toArray();
+        $resource['createdon'] = strtotime($resource['createdon']);
+        $resource['editedon'] = strtotime($resource['editedon']);
+        $resource['publishedon'] = strtotime($resource['publishedon']);
+
+        $c = $this->modx->newQuery('modResource');
+        $c->select('id');
+        if (!empty($this->config['select'])) {
+            $c->select($this->config['select']);
+        } else {
+            $c->select(array(
+                'id', 'pagetitle'
+            ));
+        }
+        $where = array();
+        $i = 0;
+        $fields = array();
+        foreach ($this->config['sort'] as $v) {
+            if (isset($resource[$v]) && !empty($resource[$v])) {
+                $fields[] = array(
+                    ($i > 0 ? 'OR:' : '') . $v . ':' . $direction => $resource[$v]
+                );
+                $i++;
+            }
+        }
+        $where[] = array($fields);
+        $where[] = array(
+            'parent:IN' => $this->config['parents'],
+            'published:=' => 1,
+            'deleted:!=' => 1,
+        );
+        if (!$this->config['includeHidden']) {
+            $where[] = array(
+                'hidemenu:!=' => 1,
+            );
+        }
+        $c->where($where);
+        foreach ($this->config['sort'] as $v) {
+            $c->sortby($v, $sortDir); // reverse the sort to get the closest sibling
+        }
+        $c->limit(1);
+        $siblingResource = $this->modx->getObject('modResource', $c);
+        if ($siblingResource) {
+            $siblingArray = $siblingResource->toArray($prefix, false, true, true);
+            if (!empty($this->config['includeTVs'])) {
+                if (empty($this->config['includeTVList'])) {
+                    $templateVars = $siblingResource->getMany('TemplateVars');
+                }
+                foreach ($templateVars as $tvId => $templateVar) {
+                    if (!empty($this->config['includeTVList']) && !in_array($templateVar->get('name'), $this->config['includeTVList'])) {
+                        continue;
+                    }
+                    if ($this->config['processTVs'] && (empty($this->config['processTVList']) || in_array($templateVar->get('name'), $this->config['processTVList']))) {
+                        $siblingArray[$prefix . $this->config['tvPrefix'] . $templateVar->get('name')] = $templateVar->renderOutput($siblingResource->get('id'));
+                    } else {
+                        $siblingArray[$prefix . $this->config['tvPrefix'] . $templateVar->get('name')] = $templateVar->getValue($siblingResource->get('id'));
+                    }
+                }
+            }
+        } else {
+            $siblingArray = array(
+                $prefix . 'id' => ''
+            );
+        }
+
+        return $siblingArray;
+    }
 }

@@ -1,4 +1,9 @@
-PrevNext 1.0.0-pl (Nov 8, 2014)
+PrevNext 1.0.1-pl (Feb 26, 2016)
+=================================================
+- fixed comparison when resource has the same published data when duplicated
+- moved logic to class
+
+PrevNext 1.0.0-pl (Aug 4, 2014)
 =================================================
 - [#2] reset $prefix . 'id' to avoid error parsing on link tag in chunk
 
