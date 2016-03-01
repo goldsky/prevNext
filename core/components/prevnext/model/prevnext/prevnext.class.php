@@ -3,7 +3,7 @@
 /**
  * PrevNext
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of PrevNext, a navigator snippet for MODX Revolution to
  * create Previous and Next links in a page
@@ -20,7 +20,7 @@
  * PrevNext; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA 02111-1307 USA
  *
- * PrevNext build script
+ * PrevNext main class
  *
  * @package prevnext
  * @subpackage class
@@ -28,7 +28,7 @@
 
 class PrevNext {
 
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.1';
     const RELEASE = 'pl';
 
     /**
@@ -445,6 +445,9 @@ class PrevNext {
         $i = 0;
         $fields = array();
         foreach ($this->config['sort'] as $v) {
+            if (empty($v)) {
+                continue;
+            }
             if (isset($resource[$v]) && !empty($resource[$v])) {
                 $fields[] = array(
                     ($i > 0 ? 'OR:' : '') . $v . ':' . $direction => $resource[$v]
@@ -452,7 +455,9 @@ class PrevNext {
                 $i++;
             }
         }
-        $where[] = array($fields);
+        if (!empty($fields)) {
+            $where[] = array($fields);
+        }
         $where[] = array(
             'parent:IN' => $this->config['parents'],
             'published:=' => 1,
@@ -464,8 +469,15 @@ class PrevNext {
             );
         }
         $c->where($where);
-        foreach ($this->config['sort'] as $v) {
-            $c->sortby($v, $sortDir); // reverse the sort to get the closest sibling
+        if (empty($this->config['sort'])) {
+            $c->sortby('id', $sortDir);
+        } else {
+            foreach ($this->config['sort'] as $v) {
+                if (empty($v)) {
+                    continue;
+                }
+                $c->sortby($v, $sortDir); // reverse the sort to get the closest sibling
+            }
         }
         $c->limit(1);
         $siblingResource = $this->modx->getObject('modResource', $c);

@@ -3,7 +3,7 @@
 /**
  * PrevNext
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of PrevNext, a navigator snippet for MODX Revolution to
  * create Previous and Next links in a page
@@ -26,24 +26,24 @@
  * @subpackage snippet
  */
 $sort = $modx->getOption('sort', $scriptProperties, 'id,publishedon');
-$scriptProperties['sort'] = @explode(',', $sort);
+$scriptProperties['sort'] = array_map('trim', @explode(',', $sort));
 $select = $modx->getOption('select', $scriptProperties, 'pagetitle');
-$scriptProperties['select'] = @explode(',', $select);
+$scriptProperties['select'] = array_map('trim', @explode(',', $select));
 $scriptProperties['includeHidden'] = intval($modx->getOption('includeHidden', $scriptProperties, 0));
 $scriptProperties['prevPrefix'] = $modx->getOption('prevPrefix', $scriptProperties, 'prev.');
 $scriptProperties['nextPrefix'] = $modx->getOption('nextPrefix', $scriptProperties, 'next.');
 $scriptProperties['tvPrefix'] = $modx->getOption('tvPrefix', $scriptProperties, 'tv.');
 $scriptProperties['includeTVs'] = $modx->getOption('includeTVs', $scriptProperties, 0);
 $includeTVList = $modx->getOption('includeTVList', $scriptProperties);
-$scriptProperties['includeTVList'] = !empty($includeTVList) ? explode(',', $includeTVList) : array();
+$scriptProperties['includeTVList'] = !empty($includeTVList) ? array_map('trim', @explode(',', $includeTVList)) : array();
 $scriptProperties['processTVs'] = $modx->getOption('processTVs', $scriptProperties, 0);
 $processTVList = $modx->getOption('processTVList', $scriptProperties);
-$scriptProperties['processTVList'] = !empty($processTVList) ? explode(',', $processTVList) : array();
+$scriptProperties['processTVList'] = !empty($processTVList) ? array_map('trim', @explode(',', $processTVList)) : array();
 $parents = $modx->getOption('parents', $scriptProperties);
-$parents = (!empty($parents) || $parents === '0') ? explode(',', $parents) : array($modx->resource->get('parent'));
-array_walk($parents, 'trim');
+$parents = (!empty($parents) || $parents === '0') ? array_map('trim', @explode(',', $parents)) : array($modx->resource->get('parent'));
 $scriptProperties['parents'] = array_unique($parents);
 $tpl = $modx->getOption('tpl', $scriptProperties, 'prevnext.tpl');
+$css = $modx->getOption('css', $scriptProperties, 'assets/components/prevnext/css/default.css');
 
 $defaultPrevNextCorePath = $modx->getOption('core_path') . 'components/prevnext/';
 $prevnextCorePath = $modx->getOption('prevnext.core_path', null, $defaultPrevNextCorePath);
@@ -52,11 +52,6 @@ $prevnext = $modx->getService('prevnext', 'PrevNext', $prevnextCorePath . 'model
 if (!($prevnext instanceof PrevNext)) {
     return;
 }
-
-$resource = $modx->resource->toArray();
-$resource['createdon'] = strtotime($resource['createdon']);
-$resource['editedon'] = strtotime($resource['editedon']);
-$resource['publishedon'] = strtotime($resource['publishedon']);
 
 // Previous
 $prevArray = $prevnext->getSibling();
@@ -68,6 +63,10 @@ $phs = array_merge($prevArray, $nextArray);
 //$toArray = 1;
 if ($toArray) {
     return '<pre>' . print_r($phs, 1) . '</pre>';
+} else {
+    if (!empty($css)) {
+        $modx->regClientCSS($css);
+    }
 }
 $output = $prevnext->parseTpl($tpl, $phs);
 $output = $prevnext->processElementTags($output);

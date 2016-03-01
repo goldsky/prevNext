@@ -1,5 +1,6 @@
-PrevNext 1.0.1-pl (Feb 26, 2016)
+PrevNext 1.0.1-pl (Mar 1, 2016)
 =================================================
+- added CSS file, removed getbootstrap's dependency
 - fixed comparison when resource has the same published data when duplicated
 - moved logic to class
 

@@ -3,7 +3,7 @@
 /**
  * PrevNext
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
  * This file is part of PrevNext, a navigator snippet for MODX Revolution to 
  * create Previous and Next links in a page
