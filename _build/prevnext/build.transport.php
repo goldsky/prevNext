@@ -3,10 +3,10 @@
 /**
  * PrevNext
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
- * This file is part of PrevNext, a navigator snippet for MODX Revolution to get
- * sibling pages
+ * This file is part of PrevNext, a navigator snippet for MODX Revolution to
+ * create Previous and Next links in a page
  *
  * PrevNext is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -25,7 +25,6 @@
  * @package prevnext
  * @subpackage build
  */
-
 $mtime = microtime();
 $mtime = explode(" ", $mtime);
 $mtime = $mtime[1] + $mtime[0];
@@ -43,16 +42,16 @@ require_once realpath(MODX_CORE_PATH) . '/model/modx/modx.class.php';
 /* define sources */
 $root = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR;
 $sources = array(
-	'root' => $root,
-	'build' => BUILD_PATH,
-	'resolvers' => BUILD_PATH . 'resolvers' . DIRECTORY_SEPARATOR,
+    'root' => $root,
+    'build' => BUILD_PATH,
+    'resolvers' => BUILD_PATH . 'resolvers' . DIRECTORY_SEPARATOR,
     'validators' => realpath(BUILD_PATH . 'validators/') . DIRECTORY_SEPARATOR,
-	'data' => BUILD_PATH . 'data' . DIRECTORY_SEPARATOR,
-	'properties' => realpath(BUILD_PATH . 'data/properties/') . DIRECTORY_SEPARATOR,
-	'source_core' => realpath(MODX_CORE_PATH . 'components') . DIRECTORY_SEPARATOR . PKG_NAME_LOWER,
-	'source_assets' => realpath(MODX_ASSETS_PATH . 'components') . DIRECTORY_SEPARATOR . PKG_NAME_LOWER,
-	'docs' => realpath(MODX_CORE_PATH . 'components/' . PKG_NAME_LOWER . '/docs/') . DIRECTORY_SEPARATOR,
-	'lexicon' => realpath(MODX_CORE_PATH . 'components/' . PKG_NAME_LOWER . '/lexicon/') . DIRECTORY_SEPARATOR,
+    'data' => BUILD_PATH . 'data' . DIRECTORY_SEPARATOR,
+    'properties' => realpath(BUILD_PATH . 'data/properties/') . DIRECTORY_SEPARATOR,
+    'source_core' => realpath(MODX_CORE_PATH . 'components') . DIRECTORY_SEPARATOR . PKG_NAME_LOWER,
+    'source_assets' => realpath(MODX_ASSETS_PATH . 'components') . DIRECTORY_SEPARATOR . PKG_NAME_LOWER,
+    'docs' => realpath(MODX_CORE_PATH . 'components/' . PKG_NAME_LOWER . '/docs/') . DIRECTORY_SEPARATOR,
+    'lexicon' => realpath(MODX_CORE_PATH . 'components/' . PKG_NAME_LOWER . '/lexicon/') . DIRECTORY_SEPARATOR,
 );
 unset($root);
 
@@ -108,10 +107,10 @@ $category->set('category', 'PrevNext');
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding in snippets.');
 $snippets = include $sources['data'] . 'transport.snippets.php';
 if (is_array($snippets)) {
-	$category->addMany($snippets);
+    $category->addMany($snippets);
     $modx->log(modX::LOG_LEVEL_INFO, 'Adding in ' . count($snippets) . ' snippets done.');
 } else {
-	$modx->log(modX::LOG_LEVEL_FATAL, 'Adding snippets failed.');
+    $modx->log(modX::LOG_LEVEL_FATAL, 'Adding snippets failed.');
 }
 
 
@@ -119,17 +118,17 @@ if (is_array($snippets)) {
  * Apply category to the elements
  */
 $elementsAttribute = array(
-	xPDOTransport::UNIQUE_KEY => 'category',
-	xPDOTransport::PRESERVE_KEYS => false,
-	xPDOTransport::UPDATE_OBJECT => true,
-	xPDOTransport::RELATED_OBJECTS => true,
-	xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array(
-		'Snippets' => array(
-			xPDOTransport::PRESERVE_KEYS => false,
-			xPDOTransport::UPDATE_OBJECT => true,
-			xPDOTransport::UNIQUE_KEY => 'name',
-		),
-	)
+    xPDOTransport::UNIQUE_KEY => 'category',
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::RELATED_OBJECTS => true,
+    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => array(
+        'Snippets' => array(
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ),
+    )
 );
 $elementsVehicle = $builder->createVehicle($category, $elementsAttribute);
 
@@ -137,13 +136,13 @@ $elementsVehicle = $builder->createVehicle($category, $elementsAttribute);
  * FILE RESOLVERS
  */
 $elementsVehicle->resolve('file', array(
-	'source' => $sources['source_core'],
-	'target' => "return MODX_CORE_PATH . 'components/';",
+    'source' => $sources['source_core'],
+    'target' => "return MODX_CORE_PATH . 'components/';",
 ));
-//$elementsVehicle->resolve('file', array(
-//	'source' => $sources['source_assets'],
-//	'target' => "return MODX_ASSETS_PATH . 'components/';",
-//));
+$elementsVehicle->resolve('file', array(
+    'source' => $sources['source_assets'],
+    'target' => "return MODX_ASSETS_PATH . 'components/';",
+));
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding in files done.');
 
 $builder->putVehicle($elementsVehicle);
@@ -156,9 +155,9 @@ flush();
  * license file, readme and setup options
  */
 $builder->setPackageAttributes(array(
-	'license' => file_get_contents($sources['docs'] . 'license.txt'),
-	'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
-	'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
+    'license' => file_get_contents($sources['docs'] . 'license.txt'),
+    'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
+    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
 ));
 
 $builder->pack();

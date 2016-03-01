@@ -3,10 +3,10 @@
 /**
  * PrevNext
  *
- * Copyright 2014 by goldsky <goldsky@virtudraft.com>
+ * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
- * This file is part of PrevNext, a navigator snippet for MODX Revolution to get
- * sibling pages
+ * This file is part of PrevNext, a navigator snippet for MODX Revolution to 
+ * create Previous and Next links in a page
  *
  * PrevNext is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
