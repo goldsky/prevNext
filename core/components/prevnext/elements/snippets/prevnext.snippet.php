@@ -44,6 +44,7 @@ $parents = (!empty($parents) || $parents === '0') ? array_map('trim', @explode('
 $scriptProperties['parents'] = array_unique($parents);
 $tpl = $modx->getOption('tpl', $scriptProperties, 'prevnext.tpl');
 $css = $modx->getOption('css', $scriptProperties, 'assets/components/prevnext/css/default.css');
+$toPlaceholder = $modx->getOption('toPlaceholder', $scriptProperties);
 
 $defaultPrevNextCorePath = $modx->getOption('core_path') . 'components/prevnext/';
 $prevnextCorePath = $modx->getOption('prevnext.core_path', null, $defaultPrevNextCorePath);
@@ -70,5 +71,10 @@ if ($toArray) {
 }
 $output = $prevnext->parseTpl($tpl, $phs);
 $output = $prevnext->processElementTags($output);
+
+if (!empty($toPlaceholder)) {
+    $modx->setPlaceholder($toPlaceholder, $output);
+    return;
+}
 
 return $output;
