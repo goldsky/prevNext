@@ -5,7 +5,7 @@
  *
  * Copyright 2014-2016 by goldsky <goldsky@virtudraft.com>
  *
- * This file is part of PrevNext, a navigator snippet for MODX Revolution to 
+ * This file is part of PrevNext, a navigator snippet for MODX Revolution to
  * create Previous and Next links in a page
  *
  * PrevNext is free software; you can redistribute it and/or modify it under the
@@ -26,7 +26,7 @@
  * @subpackage lexicon
  */
 
-$_lang['property_sort_desc'] = 'Define the sorting method of the siblings to identify the closest one. Default: publishedon.';
+$_lang['property_sort_desc'] = 'Define the sorting field(s) of the siblings to identify the closest one. Default: id,publishedon.';
 $_lang['property_includeHidden_desc'] = 'Include hidden resources.';
 $_lang['property_prevPrefix_desc'] = 'Placeholder\'s prefix for the previous page. Default: "prev."';
 $_lang['property_nextPrefix_desc'] = 'Placeholder\'s prefix for the next page. Default: "next."';
@@ -38,5 +38,5 @@ $_lang['property_processTVs_desc'] = 'Process Template Variables';
 $_lang['property_processTVList_desc'] = 'Select of the Template Variables to be processed (optional), separated with commas';
 $_lang['property_parents_desc'] = 'Rather than the page\'s parent, you can define different parents. Multiple parents\' ids should be separated with commas.';
 $_lang['property_toArray_desc'] = 'Return the output as an array of placeholders instead';
-
-
+$_lang['property_select_desc'] = 'Define which field(s) the output should return. Comma separated fields\'s names. Default is pagetitle, ID will always be returned.';
+$_lang['property_css_desc'] = 'CSS file for the styling.';

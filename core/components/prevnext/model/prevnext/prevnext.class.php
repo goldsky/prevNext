@@ -455,13 +455,14 @@ class PrevNext {
                 $i++;
             }
         }
-        if (!empty($fields)) {
-            $where[] = array($fields);
+        if (empty($fields)) {
+            $where[] = array('id:' . $direction => $resource['id']);
         }
         $where[] = array(
             'parent:IN' => $this->config['parents'],
             'published:=' => 1,
             'deleted:!=' => 1,
+            'id:!=' => $resource['id'],
         );
         if (!$this->config['includeHidden']) {
             $where[] = array(
